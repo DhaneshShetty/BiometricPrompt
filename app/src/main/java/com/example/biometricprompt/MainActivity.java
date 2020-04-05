@@ -42,22 +42,9 @@ public class MainActivity extends AppCompatActivity {
     }
     private void checkAndAuthenticate(){
         BiometricManager biometricManager=BiometricManager.from(this);
-        switch (biometricManager.canAuthenticate())
-        {
-            case BiometricManager.BIOMETRIC_SUCCESS:
-                BiometricPrompt.PromptInfo promptInfo = buildBiometricPrompt();
-                biometricPrompt.authenticate(promptInfo);
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                snack("Biometric Authentication currently unavailable");
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                snack("Your device doesn't support Biometric Authentication");
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                snack("Your device doesn't have any fingerprint enrolled");
-                break;
-        }
+        BiometricPrompt.PromptInfo promptInfo = buildBiometricPrompt();
+        biometricPrompt.authenticate(promptInfo);
+
     }
     private BiometricPrompt.PromptInfo buildBiometricPrompt()
     {
@@ -65,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle("Login")
                 .setSubtitle("FingerPrint Authentication")
                 .setDescription("Please place your finger on the sensor to unlock")
-                .setNegativeButtonText("Cancel")
+                .setDeviceCredentialAllowed(true)
                 .build();
 
     }
@@ -91,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onAuthenticationFailed() {
-                    snack("The FingerPrint was not recognized.Please Try Again!");
+                    snack("Authentication Failed.Please Try Again!");
                 }
             };
 }
